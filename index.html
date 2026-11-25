@@ -177,7 +177,7 @@ details[open] summary{margin-bottom:10px}
 
       <div class="card">
         <div class="row" style="justify-content:space-between;margin-bottom:6px">
-          <span class="small muted">Mic level <span class="muted">(red line = trigger level, grey = background noise)</span></span>
+          <span class="small muted">Mic level <span class="muted" data-feature="helperText">(red line = trigger level, grey = background noise)</span></span>
           <span class="small muted" id="dbText">–</span>
         </div>
         <div class="meter"><div class="fill" id="meterFill"></div><div class="floor" id="meterFloor"></div><div class="mark" id="meterMark"></div></div>
@@ -202,10 +202,10 @@ details[open] summary{margin-bottom:10px}
           <label class="toggle" style="margin-bottom:12px;padding:8px 10px;border-radius:8px;background:var(--surface-2)"><input type="checkbox" id="practiceMute"> Mute the toy until a session starts</label>
           <div class="grid2">
             <label class="field">Participant ID<input id="fPid" placeholder="auto if blank" autocomplete="off"></label>
-            <label class="field">Age (months)<input id="fAge" type="number" min="0" max="60" step="0.5" placeholder="optional"></label>
+            <label class="field" data-feature="participantDetails">Age (months)<input id="fAge" type="number" min="0" max="60" step="0.5" placeholder="optional"></label>
           </div>
-          <label class="field" style="margin-top:10px">Researcher<input id="fResearcher" placeholder="optional" autocomplete="off"></label>
-          <label class="field" style="margin-top:10px">Notes<textarea id="fNotes" rows="2" placeholder="optional"></textarea></label>
+          <label class="field" style="margin-top:10px" data-feature="participantDetails">Researcher<input id="fResearcher" placeholder="optional" autocomplete="off"></label>
+          <label class="field" style="margin-top:10px" data-feature="participantDetails">Notes<textarea id="fNotes" rows="2" placeholder="optional"></textarea></label>
           <button class="btn primary big" id="startBtn" style="width:100%;margin-top:12px">Start session</button>
         </div>
         <div id="sessionActive" hidden>
@@ -218,7 +218,7 @@ details[open] summary{margin-bottom:10px}
             <button class="btn primary grow" id="endBtn">End &amp; save</button>
             <button class="btn danger" id="discardBtn" title="Delete this session without saving">Discard</button>
           </div>
-          <div class="row" style="margin-top:10px">
+          <div class="row" style="margin-top:10px" data-feature="markers">
             <input id="markLabel" class="grow" placeholder="Note for a marker (e.g. baby fussing)" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 9px">
             <button class="btn small" id="markBtn">Add marker</button>
           </div>
@@ -234,34 +234,35 @@ details[open] summary{margin-bottom:10px}
         <div class="seg" role="radiogroup" aria-label="Tune change" style="margin-top:8px" id="tuneSeg">
           <label><input type="radio" name="tune" value="flip"><span>Flip</span></label>
           <label><input type="radio" name="tune" value="flatten"><span>Flatten</span></label>
-          <label><input type="radio" name="tune" value="random"><span>Random</span></label>
+          <label data-feature="randomTune"><input type="radio" name="tune" value="random"><span>Random</span></label>
         </div>
         <div class="stack" style="gap:8px;margin-top:14px">
           <div class="slider"><span>Pitch</span><input type="range" id="pitch" min="-12" max="24" step="0.5"><output id="pitch-val"></output></div>
           <div class="slider"><span>Speed</span><input type="range" id="speed" min="0.5" max="2" step="0.05"><output id="speed-val"></output></div>
-          <div class="slider"><span>Volume</span><input type="range" id="volume" min="0" max="2" step="0.05"><output id="volume-val"></output></div>
+          <div class="slider" data-feature="volumeSlider"><span>Volume</span><input type="range" id="volume" min="0" max="2" step="0.05"><output id="volume-val"></output></div>
         </div>
         <div class="row" style="margin-top:12px;justify-content:space-between">
-          <label class="toggle"><input type="checkbox" id="autoReply"> Auto reply</label>
-          <label class="toggle"><input type="checkbox" id="showCharacter"> Show character</label>
+          <label class="toggle" data-feature="autoReply"><input type="checkbox" id="autoReply"> Auto reply</label>
+          <label class="toggle" data-feature="characterToggle"><input type="checkbox" id="showCharacter"> Show character</label>
         </div>
-        <label class="toggle" style="margin-top:8px" title="If the baby makes a sound while the toy is talking, the toy stops and replies to that sound instead"><input type="checkbox" id="listenWhileReplying"> Listen while replying (baby can interrupt)</label>
+        <label class="toggle" style="margin-top:8px" data-feature="listenWhileReplying" title="If the baby makes a sound while the toy is talking, the toy stops and replies to that sound instead"><input type="checkbox" id="listenWhileReplying"> Listen while replying (baby can interrupt)</label>
         <div class="bigreply" style="margin-top:12px">
-          <button class="btn primary big" id="replyBtn" disabled>Reply now</button>
+          <button class="btn primary big" id="listenBtn" data-feature-off="autoDetect">Start listening</button>
+          <button class="btn primary big" id="replyBtn" data-feature="autoDetect" disabled>Reply now</button>
           <button class="btn big" id="stopBtn" disabled>Stop</button>
         </div>
-        <div class="small muted" style="margin-top:8px" id="replyHint">Reply now plays the baby's last sound with the current settings.</div>
+        <!-- <div class="small muted" style="margin-top:8px" id="replyHint">Reply now plays the baby's last sound with the current settings.</div> -->
         <div class="note" id="lastReply" style="margin-top:8px" hidden></div>
       </div>
 
       <div class="card">
         <h2>Live stats</h2>
         <div class="stats" id="liveStats"></div>
-        <div class="tablewrap" style="margin-top:10px"><table id="condTable"></table></div>
+        <div class="tablewrap" style="margin-top:10px" data-feature="fullSummaryCsv"><table id="condTable"></table></div>
       </div>
 
       <div class="card">
-        <details>
+        <details data-feature="autoDetect">
           <summary>Detection &amp; analysis settings</summary>
           <div class="stack" style="gap:8px">
             <div class="slider"><span>Sensitivity</span><input type="range" id="sensitivity" min="4" max="30" step="1"><output id="sensitivity-val"></output></div>
@@ -279,7 +280,7 @@ details[open] summary{margin-bottom:10px}
             <div class="small muted" style="margin-top:-4px">Silence longer than this ends an engagement bout.</div>
           </div>
         </details>
-        <div class="small muted" style="margin-top:10px">Shortcuts: <span class="kbd">Space</span> reply · <span class="kbd">S</span> stop · <span class="kbd">C</span> switch condition · <span class="kbd">P</span> pause · <span class="kbd">M</span> marker · <span class="kbd">F</span> full screen</div>
+        <div class="small muted" style="margin-top:10px" id="shortcuts" data-feature="helperText">Shortcuts: <span class="kbd">Space</span> reply · <span class="kbd">S</span> stop · <span class="kbd">C</span> switch condition · <span class="kbd">P</span> pause · <span class="kbd">M</span> marker · <span class="kbd">F</span> full screen</div>
       </div>
     </div>
   </div>
@@ -287,12 +288,12 @@ details[open] summary{margin-bottom:10px}
   <div class="card section">
     <div class="row" style="justify-content:space-between;margin-bottom:10px">
       <h2 style="margin:0">Saved sessions</h2>
-      <div class="row">
+      <div class="row" data-feature="exportAll">
         <button class="btn small" id="exportAllEvents">Export all: events CSV</button>
         <button class="btn small" id="exportAllSummary">Export all: summary CSV</button>
       </div>
     </div>
-    <div class="note" style="margin-bottom:10px">Audio is never saved. Sessions (events and timings only) are kept in this browser on this computer. Export CSVs regularly as a backup, because clearing browser data erases them.</div>
+    <div class="note" style="margin-bottom:10px" data-feature="helperText">Audio is never saved. Sessions (events and timings only) are kept in this browser on this computer. Export CSVs regularly as a backup, because clearing browser data erases them.</div>
     <div class="tablewrap"><table id="savedTable"></table></div>
   </div>
 </div>
@@ -310,6 +311,32 @@ details[open] summary{margin-bottom:10px}
 
 <script src="cactus-metrics.js"></script>
 <script>
+/* ======================= Feature switches =======================
+   Turned off for the first lab meeting, to keep the demo simple.
+   Nothing is deleted: set any of these to true to bring it back. */
+const FEATURES = {
+  participantDetails: false, // age, researcher and notes fields (participant ID always stays)
+  autoReply: false,          // toy replies by itself; when off, the researcher presses "Reply now"
+  chartsPage: false,         // "View charts" link to cactus-report.html in Saved sessions
+  exportAll: false,          // "Export all" buttons (one CSV covering every saved session)
+  fullEventsCsv: false,      // false = short events CSV with a few basic columns (BASIC_EVENT_COLS)
+  lastReplySummary: false,   // "Last reply: heard ... played ..." box under the Reply buttons
+  autoDetect: false,         // false = researcher presses Start/Stop listening and the toy repeats everything it heard;
+                             // true = the toy finds each baby sound by itself (plus "Reply now" / auto reply)
+  eventsCsv: false,          // per-session "Events CSV" button
+  fullSummaryCsv: false,     // false = one-row summary CSV with a few simple numbers (simpleSummaryRow)
+  markers: false,            // note / marker box while a session is running
+  volumeSlider: false,       // volume slider (volume stays at 100% while hidden)
+  listenWhileReplying: false,// "Listen while replying" option
+  characterToggle: false,    // "Show character" option (character always shown while hidden)
+  randomTune: false,         // "Random" choice under Change tune
+  detailedEventLog: false,   // false = Recent events in plain words (no Hz, ms, pitch shapes)
+  helperText: false          // small explanation lines (mic level key, shortcuts list, storage note)
+};
+const listenOverOn = () => FEATURES.autoDetect && FEATURES.listenWhileReplying && settings.listenWhileReplying;
+const volumeNow = () => FEATURES.volumeSlider ? settings.volume : 1;
+const characterOn = () => !FEATURES.characterToggle || settings.showCharacter;
+const autoReplyOn = () => FEATURES.autoReply && settings.autoReply;
 'use strict';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -330,6 +357,7 @@ const DEFAULTS = {
   sensitivity: 12, minLen: 150, endSilence: 400, maxLen: 3000, replyDelay: 0, responseWindow: 3000, boutGap: 10000
 };
 const settings = Object.assign({}, DEFAULTS, store.get(K_SET, {}));
+if (!FEATURES.randomTune && settings.tune === 'random') settings.tune = 'flip';
 const committed = Object.assign({}, settings);
 const saveSettings = () => store.set(K_SET, settings);
 const condKey = (s = settings) => s.condition === 'copy' ? 'copy' : 'change-' + s.tune;
@@ -691,7 +719,7 @@ async function startMicOnce() {
     const sink = ctx.createGain(); sink.gain.value = 0;
     node.connect(sink); sink.connect(ctx.destination);
     node.port.onmessage = e => onChunk(e.data);
-    outGain = ctx.createGain(); outGain.gain.value = settings.volume;
+    outGain = ctx.createGain(); outGain.gain.value = volumeNow();
     analyser = ctx.createAnalyser(); analyser.fftSize = 1024;
     outGain.connect(analyser); analyser.connect(ctx.destination);
     if (ctx.state === 'suspended') await ctx.resume();
@@ -725,7 +753,7 @@ function onChunk(buf) {
     }
   }
   const onTh = det.noiseDb + settings.sensitivity, offTh = onTh - 4;
-  const listenOver = settings.listenWhileReplying;
+  const listenOver = listenOverOn();
   // echo estimate while the toy plays: toy output level + learned mic/speaker coupling
   let echoTh = -Infinity;
   if (playing && analyser) {
@@ -741,6 +769,12 @@ function onChunk(buf) {
     }
   } else det.outHist = [];
   updateMeter(db, playing && listenOver ? Math.max(onTh, echoTh) : onTh, det.noiseDb);
+  if (!FEATURES.autoDetect) {
+    // Start/Stop listening mode: keep every chunk between the two presses, no automatic sound detection
+    if (rec && !listeningActive()) cancelListening();
+    else if (rec && !playing) { rec.chunks.push(buf); rec.peakDb = Math.max(rec.peakDb, db); if (rec.chunks.length * chunkMs >= MAX_LISTEN_MS) stopListening(); }
+    return;
+  }
   const blocked = !listeningActive() || now < ignoreUntil || (!listenOver && (playing || pendingTimer));
   if (blocked) { if (det.inUtt) { det.inUtt = false; setState(); } det.pre = []; det.bargeBuf = []; return; }
   if (playing) {
@@ -789,7 +823,7 @@ function handleVocalization(samples, sr, startT, endT, peakDb, barge) {
   const voc = { id: ++vocCounter, samples, sr, pa, startT, endT, peakDb, replied: false, barge: !!barge, interrupted: barge ? lastInterrupted : null };
   lastVoc = voc;
   if (session && !session.paused) logVocalization(voc);
-  if (settings.autoReply && !practiceMuted()) scheduleReply(voc, 'auto');
+  if (autoReplyOn() && !practiceMuted()) scheduleReply(voc, 'auto');
   setState(); updateButtons();
 }
 const practiceMuted = () => !session && settings.practiceMute;
@@ -810,7 +844,7 @@ function playReply(voc, r, cfg, trigger) {
   const buf = ctx.createBuffer(1, r.buf.length, ctx.sampleRate);
   buf.copyToChannel(r.buf, 0);
   const src = ctx.createBufferSource(); src.buffer = buf; src.connect(outGain);
-  outGain.gain.value = settings.volume;
+  outGain.gain.value = volumeNow();
   const startT = performance.now() + ((ctx.outputLatency || ctx.baseLatency || 0) * 1000);
   const ev = (session && !session.paused) ? logReply(voc, r, cfg, trigger, startT, buf.duration * 1000) : null;
   const id = ++replyCounter;
@@ -842,6 +876,7 @@ function bargeIn() {
 }
 // plain-language readout of what the last reply did, so testers can hear-check flip/flatten
 function showLastReply(voc, r, cfg) {
+  if (!FEATURES.lastReplySummary) return;
   const el = $('#lastReply'), i = voc.pa.stats, o = r.outStats;
   const hz = st => isNaN(st) ? '' : ' at ' + Math.round(stToHz(st)) + ' Hz';
   const rg = v => isNaN(v) ? '' : ', range ' + v.toFixed(1) + ' st';
@@ -861,6 +896,31 @@ function stopPlayback(userAction) {
   if (currentSrc) { currentSrc._stopped = !!userAction; try { currentSrc.stop(); } catch (e) {} }
   setState(); updateButtons();
 }
+
+/* ---------------- Start / Stop listening (FEATURES.autoDetect = false) ---------------- */
+const MAX_LISTEN_MS = 30000;   // safety cap: listening stops by itself after 30 s
+let rec = null;                // { chunks, startT, peakDb } while listening
+function startListening() {
+  if (rec || (session && session.paused)) return;
+  if (!micOn) { startMic().then(ok => ok && startListening()); return; }
+  stopPlayback(false);
+  rec = { chunks: [], startT: performance.now(), peakDb: -100 };
+  setState(); updateButtons();
+}
+function stopListening() {
+  if (!rec) return;
+  const r = rec; rec = null;
+  const len = r.chunks.reduce((a, c) => a + c.length, 0);
+  if (len < ctx.sampleRate * 0.1) { setState(); updateButtons(); return; }   // under 0.1 s: nothing to repeat
+  const samples = new Float32Array(len); let o = 0;
+  for (const c of r.chunks) { samples.set(c, o); o += c.length; }
+  const endT = performance.now();
+  handleVocalization(samples, ctx.sampleRate, endT - len / ctx.sampleRate * 1000, endT, r.peakDb, false);
+  if (!practiceMuted()) scheduleReply(lastVoc, 'manual');
+  setState(); updateButtons();
+}
+function cancelListening() { rec = null; setState(); updateButtons(); }
+const toggleListening = () => rec ? stopListening() : startListening();
 
 function manualReply() {
   if (!micOn || !lastVoc || (session && session.paused) || practiceMuted()) return;
@@ -969,6 +1029,7 @@ function startSession() {
 }
 
 function togglePause() {
+  if (rec) cancelListening();
   if (!session) return;
   if (!session.paused) {
     stopPlayback(false);
@@ -1050,6 +1111,14 @@ const EVENT_COLS = ['session_id', 'participant_id', 'age_months', 'researcher', 
   'peak_db', 'voiced_frac', 'f0_mean_hz', 'f0_min_hz', 'f0_max_hz', 'f0_range_st', 'f0_slope_st_per_s', 'contour_shape',
   'follows_reply', 'latency_after_reply_ms', 'barge_in', 'interrupted_reply_id', 'response_delay_ms', 'processing_ms', 'tune_applied',
   'out_f0_mean_hz', 'out_f0_range_st', 'out_contour_shape', 'stopped', 'stop_reason', 'interrupted', 'answered', 'baby_latency_ms', 'setting', 'old_value', 'new_value', 'label'];
+// Short events CSV for the first meeting: when it happened, which condition, the baby's sound, and whether it answered the toy.
+// Every event is still recorded in full; this only picks which columns (and rows) go into the file.
+const BASIC_EVENT_COLS = ['participant_id', 'session_start', 'idx', 'type', 't_session_ms', 'cond_key',
+  'voc_id', 'duration_ms', 'f0_mean_hz', 'contour_shape', 'follows_reply', 'latency_after_reply_ms',
+  'reply_id', 'trigger', 'source_voc_id', 'label'];
+const BASIC_EVENT_TYPES = ['session_start', 'session_end', 'pause', 'resume', 'condition_change', 'vocalization', 'reply', 'marker'];
+const eventsCsv = s => FEATURES.fullEventsCsv ? toCSV(eventRows(s), EVENT_COLS)
+  : toCSV(eventRows(s).filter(r => BASIC_EVENT_TYPES.includes(r.type)), BASIC_EVENT_COLS);
 function toCSV(rows, cols) {
   if (!cols) { const set = new Set(); rows.forEach(r => Object.keys(r).forEach(k => set.add(k))); cols = [...set]; }
   const esc = v => { if (v === undefined || v === null) return ''; const s = String(v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
@@ -1061,6 +1130,23 @@ function download(name, text) {
   a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
 const eventRows = s => s.events.map(e => Object.assign({}, META(s), e));
+// One row per session with a few simple numbers, for the first meeting (FEATURES.fullSummaryCsv = false)
+function simpleSummaryRow(s) {
+  const vocs = s.events.filter(e => e.type === 'vocalization'), reps = s.events.filter(e => e.type === 'reply');
+  const end = s.endWall || Date.now(), sec = ms => Math.round(ms / 100) / 10;
+  const conds = [...new Set([...Object.keys(s.condTime || {}), ...vocs.map(v => v.cond_key), ...reps.map(r => r.cond_key)].filter(Boolean))];
+  return {
+    participant_id: s.participant_id,
+    session_start: new Date(s.startWall).toISOString(),
+    session_length_s: sec(end - s.startWall),     // start to end, including pauses
+    active_time_s: sec(s.activeMs),               // time not paused
+    listens: vocs.length,                         // times the toy listened to the baby
+    replies: reps.length,                         // times the toy played a reply
+    avg_listen_s: vocs.length ? sec(vocs.reduce((a, v) => a + (+v.duration_ms || 0), 0) / vocs.length) : '',
+    conditions_used: conds.join(' / ')
+  };
+}
+const summaryCsv = s => FEATURES.fullSummaryCsv ? toCSV(summaryRows(s)) : toCSV([simpleSummaryRow(s)]);
 const summaryRows = s => summarize(s).map(r => Object.assign({}, META(s), { session_end: s.endWall ? new Date(s.endWall).toISOString() : '' }, r));
 const fileStem = s => 'cactus_' + s.participant_id.replace(/[^\w-]+/g, '_') + '_' + new Date(s.startWall).toISOString().slice(0, 16).replace(/[:T]/g, '-');
 const today = () => new Date().toISOString().slice(0, 10);
@@ -1074,9 +1160,11 @@ function setState() {
   else if (session && session.paused) { s = 'paused'; t = 'Paused'; }
   else if (playing) { s = 'replying'; t = 'Replying'; }
   else if (pendingTimer) { s = 'replying'; t = 'Reply coming…'; }
+  else if (rec) { s = 'hearing'; t = 'Listening… press Stop listening when done'; }
   else if (det.inUtt) { s = 'hearing'; t = 'Hearing a sound'; }
-  else if (practiceMuted()) { s = 'paused'; t = 'Listening (toy muted)'; }
-  else if (!settings.autoReply && lastVoc && !lastVoc.replied) { s = 'hearing'; t = 'Sound heard: press Reply'; }
+  else if (practiceMuted()) { s = 'paused'; t = FEATURES.autoDetect ? 'Listening (toy muted)' : 'Toy muted until a session starts'; }
+  else if (!FEATURES.autoDetect) { s = 'listening'; t = 'Ready'; }
+  else if (!autoReplyOn() && lastVoc && !lastVoc.replied) { s = 'hearing'; t = 'Sound heard: press Reply'; }
   state = s;
   $('#statePill').dataset.state = s; $('#stateText').textContent = t;
 }
@@ -1085,6 +1173,10 @@ function updateButtons() {
   const blocked = !micOn || (session && session.paused);
   $('#replyBtn').disabled = blocked || !lastVoc || practiceMuted();
   $('#stopBtn').disabled = !playing && !pendingTimer;
+  const lb = $('#listenBtn');
+  lb.disabled = !!(session && session.paused);
+  lb.textContent = rec ? 'Stop listening' : 'Start listening';
+  lb.classList.toggle('danger', !!rec); lb.classList.toggle('primary', !rec);
   $$('input[name=tune]').forEach(i => i.disabled = settings.condition !== 'change');
 }
 
@@ -1111,6 +1203,13 @@ const LABEL = { copy: 'Copy', 'change-flip': 'Change: flip', 'change-flatten': '
 function renderStats() {
   const box = $('#liveStats'), tbl = $('#condTable');
   if (!session) { box.innerHTML = '<div class="muted small" style="grid-column:1/-1">Start a session to see stats.</div>'; tbl.innerHTML = ''; return; }
+  if (!FEATURES.fullSummaryCsv) {
+    const r = simpleSummaryRow(session), mmss = sec => fmtTime(sec * 1000);
+    const tiles = [['Listens', r.listens], ['Replies', r.replies], ['Avg listen', r.avg_listen_s === '' ? '–' : r.avg_listen_s + 's'],
+      ['Active time', mmss(activeMsNow() / 1000)], ['Session length', mmss(r.session_length_s)]];
+    box.innerHTML = tiles.map(([k, v]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join('');
+    tbl.innerHTML = ''; return;
+  }
   const rows = summarize(session), o = rows[0];
   const pctv = v => v === '' ? '–' : Math.round(v * 100) + '%';
   const msv = v => v === '' ? '–' : (v / 1000).toFixed(2) + 's';
@@ -1124,6 +1223,7 @@ function renderStats() {
 
 function describe(e) {
   const t = fmtTime(e.t_session_ms);
+  if (!FEATURES.detailedEventLog) return describeSimple(e, t);
   switch (e.type) {
     case 'vocalization': return `${t}  baby sound #${e.voc_id}  ${e.duration_ms}ms  ${e.f0_mean_hz ? e.f0_mean_hz + 'Hz ' : ''}${e.contour_shape}${e.follows_reply ? '  ↩ response (' + e.latency_after_reply_ms + 'ms)' : ''}${e.barge_in ? '  ⚡ interrupted reply #' + e.interrupted_reply_id : ''}`;
     case 'reply': return `${t}  reply #${e.reply_id} (${e.trigger})  ${LABEL[e.cond_key] || e.cond_key}  ${e.pitch_st > 0 ? '+' : ''}${e.pitch_st}st ×${e.speed}  delay ${e.response_delay_ms}ms${e.tune_applied === 0 ? '  ✗ tune not changed (no clear pitch)' : ''}`;
@@ -1133,10 +1233,25 @@ function describe(e) {
     default: return `${t}  ${e.type.replace('_', ' ')}`;
   }
 }
+// Recent events in plain words for the demo; settings changes are left out (still saved in the data)
+function describeSimple(e, t) {
+  const cond = LABEL[e.cond_key] || e.cond_key;
+  switch (e.type) {
+    case 'session_start': return `${t}  Session started`;
+    case 'session_end': return `${t}  Session ended`;
+    case 'pause': return `${t}  Paused`;
+    case 'resume': return `${t}  Resumed`;
+    case 'vocalization': return `${t}  Listened (${(e.duration_ms / 1000).toFixed(1)} s)`;
+    case 'reply': return `${t}  Toy replied (${cond})`;
+    case 'condition_change': return `${t}  Switched to ${cond}`;
+    case 'marker': return `${t}  Note: ${e.label || ''}`;
+    default: return null;
+  }
+}
 function renderLog() {
   const el = $('#log');
   if (!session || !session.events.length) { el.innerHTML = '<div class="muted">No events yet.</div>'; return; }
-  el.innerHTML = session.events.slice(-40).reverse().map(e => `<div>${escapeHtml(describe(e))}</div>`).join('');
+  el.innerHTML = session.events.map(describe).filter(Boolean).slice(-40).reverse().map(d => `<div>${escapeHtml(d)}</div>`).join('');
 }
 const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -1144,15 +1259,16 @@ function renderSaved() {
   const t = $('#savedTable'), all = savedCache;
   $('#exportAllEvents').disabled = $('#exportAllSummary').disabled = !all.length;
   if (!all.length) { t.innerHTML = '<tr><td class="muted">No saved sessions yet.</td></tr>'; return; }
-  t.innerHTML = '<tr><th>Participant</th><th>Age</th><th>Started</th><th class="num">Active</th><th class="num">Sounds</th><th class="num">Replies</th><th class="num">Resp. rate</th><th>Charts</th><th>Export</th></tr>' +
+  const age = FEATURES.participantDetails, charts = FEATURES.chartsPage, full = FEATURES.fullSummaryCsv;
+  t.innerHTML = '<tr><th>Participant</th>' + (age ? '<th>Age</th>' : '') + '<th>Started</th><th class="num">Active</th><th class="num">' + (FEATURES.autoDetect ? 'Sounds' : 'Listens') + '</th><th class="num">Replies</th>' + (full ? '<th class="num">Resp. rate</th>' : '') + (charts ? '<th>Charts</th>' : '') + '<th>Export</th></tr>' +
     all.map((s, i) => {
       const o = summarize(s)[0];
-      return `<tr><td><b>${escapeHtml(s.participant_id)}</b>${s.researcher ? '<div class="small muted">' + escapeHtml(s.researcher) + '</div>' : ''}</td>
-      <td>${escapeHtml(s.age_months || '')}</td><td>${new Date(s.startWall).toLocaleString()}</td>
+      return `<tr><td><b>${escapeHtml(s.participant_id)}</b>${age && s.researcher ? '<div class="small muted">' + escapeHtml(s.researcher) + '</div>' : ''}</td>
+      ${age ? `<td>${escapeHtml(s.age_months || '')}</td>` : ''}<td>${new Date(s.startWall).toLocaleString()}</td>
       <td class="num">${fmtTime(s.activeMs)}</td><td class="num">${o.vocalizations}</td><td class="num">${o.replies}</td>
-      <td class="num">${o.response_rate === '' ? '–' : Math.round(o.response_rate * 100) + '%'}</td>
-      <td><a class="btn small primary" href="cactus-report.html?s=${encodeURIComponent(s.id)}" target="_blank" rel="noopener" style="text-decoration:none;white-space:nowrap">View charts ↗</a></td>
-      <td style="white-space:nowrap"><button class="btn small" data-act="ev" data-i="${i}">Events CSV</button>
+      ${full ? `<td class="num">${o.response_rate === '' ? '–' : Math.round(o.response_rate * 100) + '%'}</td>` : ''}
+      ${charts ? `<td><a class="btn small primary" href="cactus-report.html?s=${encodeURIComponent(s.id)}" target="_blank" rel="noopener" style="text-decoration:none;white-space:nowrap">View charts ↗</a></td>` : ''}
+      <td style="white-space:nowrap">${FEATURES.eventsCsv ? `<button class="btn small" data-act="ev" data-i="${i}">Events CSV</button>` : ''}
       <button class="btn small" data-act="sum" data-i="${i}">Summary CSV</button>
       <button class="btn small danger" data-act="del" data-i="${i}">Delete</button></td></tr>`;
     }).reverse().join('');
@@ -1173,7 +1289,7 @@ const FMT = {
 for (const key of Object.keys(FMT)) {
   const el = $('#' + key), out = $('#' + key + '-val');
   el.value = settings[key]; out.textContent = FMT[key](+el.value);
-  el.addEventListener('input', () => { settings[key] = +el.value; out.textContent = FMT[key](+el.value); if (key === 'volume' && outGain) outGain.gain.value = settings.volume; saveSettings(); });
+  el.addEventListener('input', () => { settings[key] = +el.value; out.textContent = FMT[key](+el.value); if (key === 'volume' && outGain) outGain.gain.value = volumeNow(); saveSettings(); });
   el.addEventListener('change', () => commitSetting(key));
 }
 function setCondition(v) {
@@ -1202,10 +1318,18 @@ function bindToggle(key, after) {
 bindToggle('autoReply');
 bindToggle('listenWhileReplying', () => { det.bargeBuf = []; });
 bindToggle('practiceMute', () => { if (practiceMuted()) stopPlayback(false); updateButtons(); });
-bindToggle('showCharacter', () => $('#stage').classList.toggle('hidechar', !settings.showCharacter));
-$('#stage').classList.toggle('hidechar', !settings.showCharacter);
+bindToggle('showCharacter', () => $('#stage').classList.toggle('hidechar', !characterOn()));
+$('#stage').classList.toggle('hidechar', !characterOn());
 
 $('#micBtn').addEventListener('click', () => startMic());
+$$('[data-feature]').forEach(el => { if (!FEATURES[el.dataset.feature]) el.hidden = true; });
+$$('[data-feature-off]').forEach(el => { if (FEATURES[el.dataset.featureOff]) el.hidden = true; });
+$$('.row').forEach(r => { if (r.children.length && [...r.children].every(c => c.hidden)) r.hidden = true; });
+if (!FEATURES.autoDetect) {
+  // $('#replyHint').textContent = 'Press Start listening, let the baby vocalize, then press Stop listening: the toy repeats everything it heard (up to 30 s).';
+  $('#stopBtn').textContent = 'Stop reply';
+  $('#shortcuts').innerHTML = 'Shortcuts: <span class="kbd">Space</span> start / stop listening · <span class="kbd">S</span> stop reply · <span class="kbd">C</span> switch condition · <span class="kbd">P</span> pause · <span class="kbd">F</span> full screen';
+}
 $('#micSelect').addEventListener('change', e => switchMic(e.target.value));
 if (navigator.mediaDevices) navigator.mediaDevices.addEventListener('devicechange', () => micOn && fillMicList());
 document.addEventListener('pointerdown', () => { if (ctx && ctx.state === 'suspended') ctx.resume().then(checkMicHealth); });
@@ -1216,6 +1340,7 @@ $('#endBtn').addEventListener('click', endSession);
 $('#markBtn').addEventListener('click', () => addMarker($('#markLabel').value.trim()));
 $('#markLabel').addEventListener('keydown', e => { if (e.key === 'Enter') addMarker($('#markLabel').value.trim()); });
 $('#replyBtn').addEventListener('click', manualReply);
+$('#listenBtn').addEventListener('click', toggleListening);
 $('#stopBtn').addEventListener('click', () => stopPlayback(true));
 $('#fullBtn').addEventListener('click', toggleFull);
 function toggleFull() { if (document.fullscreenElement) document.exitFullscreen(); else $('#stage').requestFullscreen().catch(() => {}); }
@@ -1223,8 +1348,8 @@ function toggleFull() { if (document.fullscreenElement) document.exitFullscreen(
 $('#savedTable').addEventListener('click', e => {
   const b = e.target.closest('button[data-act]'); if (!b) return;
   const s = savedCache[+b.dataset.i]; if (!s) return;
-  if (b.dataset.act === 'ev') download(fileStem(s) + '_events.csv', toCSV(eventRows(s), EVENT_COLS));
-  if (b.dataset.act === 'sum') download(fileStem(s) + '_summary.csv', toCSV(summaryRows(s)));
+  if (b.dataset.act === 'ev') download(fileStem(s) + '_events.csv', eventsCsv(s));
+  if (b.dataset.act === 'sum') download(fileStem(s) + '_summary.csv', summaryCsv(s));
   if (b.dataset.act === 'del') {
     askConfirm('Delete saved session?', 'The saved session for ' + s.participant_id + ' will be permanently deleted. Export it first if you need it. This cannot be undone.', 'Yes, delete it', true)
       .then(ok => { if (!ok) return; const i = savedCache.indexOf(s); if (i >= 0) { savedCache.splice(i, 1); store.set(K_SESS, savedCache); renderSaved(); } });
@@ -1237,11 +1362,11 @@ $('#exportAllSummary').addEventListener('click', () => download('cactus_all_summ
 document.addEventListener('keydown', e => {
   if (modalOpen() || e.target.closest('input:not([type=range]):not([type=radio]):not([type=checkbox]),textarea,select') || e.metaKey || e.ctrlKey || e.altKey) return;
   const k = e.key.toLowerCase();
-  if (k === ' ') { e.preventDefault(); manualReply(); }
+  if (k === ' ') { e.preventDefault(); FEATURES.autoDetect ? manualReply() : toggleListening(); }
   else if (k === 's' || k === 'escape') stopPlayback(true);
   else if (k === 'c') setCondition(settings.condition === 'copy' ? 'change' : 'copy');
   else if (k === 'p') togglePause();
-  else if (k === 'm') addMarker('');
+  else if (k === 'm' && FEATURES.markers) addMarker('');
   else if (k === 'f') toggleFull();
 });
 window.addEventListener('beforeunload', e => { if (session) { persistCurrent(); e.preventDefault(); e.returnValue = ''; } });
