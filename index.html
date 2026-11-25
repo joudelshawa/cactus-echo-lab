@@ -1324,7 +1324,7 @@ $('#stage').classList.toggle('hidechar', !characterOn());
 $('#micBtn').addEventListener('click', () => startMic());
 $$('[data-feature]').forEach(el => { if (!FEATURES[el.dataset.feature]) el.hidden = true; });
 $$('[data-feature-off]').forEach(el => { if (FEATURES[el.dataset.featureOff]) el.hidden = true; });
-$$('.row').forEach(r => { if (r.children.length && [...r.children].every(c => c.hidden)) r.hidden = true; });
+$$('.row, .card').forEach(r => { if (r.children.length && [...r.children].every(c => c.hidden)) r.hidden = true; });
 if (!FEATURES.autoDetect) {
   // $('#replyHint').textContent = 'Press Start listening, let the baby vocalize, then press Stop listening: the toy repeats everything it heard (up to 30 s).';
   $('#stopBtn').textContent = 'Stop reply';
